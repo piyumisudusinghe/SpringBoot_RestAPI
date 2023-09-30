@@ -30,7 +30,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/students/{id}")
-    public String removeStudent(@PathVariable Long id)
+    public ResponseEntity<?> removeStudent(@PathVariable Long id)
     {
         return studentService.removeStudent(id);
     }

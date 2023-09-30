@@ -58,9 +58,25 @@ public class StudentService {
         }
     }
 
-    public String removeStudent(Long id)
+    public ResponseEntity<?> removeStudent(Long id)
     {
-        studentRepository.deleteById(id);
-        return "Successfully removed the student with id : " + id;
+        Optional<Student> student = studentRepository.findById(id);
+        if (student.isPresent())
+        {
+            try
+            {
+                studentRepository.deleteById(id);
+                return new ResponseEntity<>(null,HttpStatus.OK);
+            }
+            catch(Exception exception)
+            {
+                ErrorSource errorSource = new ErrorSource("ERR_IN_RESOURCE_DELETION",exception.getMessage());
+                return new ResponseEntity<>(errorSource,HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+        else
+        {
+            return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
+        }
     }
 }
